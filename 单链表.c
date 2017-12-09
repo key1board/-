@@ -1,4 +1,3 @@
-/*版本1.0*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,8 +50,8 @@ Node * CreateList_End(int n)  //尾插法，头结点为NULL
 	Node *head, *p, *e;
 	int i;
 
-	head = NULL;
-	e = NULL;
+	head = (Node *)malloc(sizeof(Node));
+	e = head;     //让e指向头结点
 	for(i=0;i<n;i++)
 	{
 		p = (Node*)malloc(sizeof(Node));
@@ -66,16 +65,12 @@ Node * CreateList_End(int n)  //尾插法，头结点为NULL
 		scanf("%d", &p->MA);
 		printf("\n请输入英语成绩:");
 		scanf("%d", &p->EN);
-		if (head == NULL)        //先判断输入的是不是第一个节点  
-			head = p;
-		else
-			e->next = p;     //e始终指向输入的最后一个节点  
-		e = p;
-	}
-	if (e != NULL)               //如果链表不为空，则最后节点的下一个节点为空  
-		e->next = NULL;
+		e->next = p;     //把新结点添加到表尾  
+		e = p;           //把指针指向新结点
+	}      
+		e->next = NULL; //尾结点的指针域置空
 
-	return head;                //尾插法比头插法复杂一些，程序中要做两次判断，分别是判断第一个节点和最后一个节点的判断。且消耗多一个指针变量e。  
+	return head;               
 }
 
 Node * search(Node * head, char *name) //对单个元素进行查找
