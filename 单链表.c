@@ -17,15 +17,9 @@ typedef struct Node
 
 Node * NewLink(int n) //尾插法建立新表
 {
-	Node *p, *L, *h;
+	Node *p, *h;
 	int i;
-	if ((L = (Node *)malloc(sizeof(Node))) == NULL)
-	{
-		printf("不能分配空间!");
-		exit(0);
-	}
-	L->next = NULL;
-	h = L;
+	h = NULL;
 	for (i = 0; i < n; i++)
 	{
 		if ((p = (Node *)malloc(sizeof(Node))) == NULL)
@@ -33,7 +27,8 @@ Node * NewLink(int n) //尾插法建立新表
 			printf("不能分配空间！");
 			exit(0);
 		}
-		h->next = p;
+		p->next = h;		
+		h = p;
 		printf("\n请输入第%d位学生姓名:", i + 1);
 		scanf("%s",p->name);
 		printf("\n请输入学号:");
@@ -44,12 +39,43 @@ Node * NewLink(int n) //尾插法建立新表
 		scanf("%d", &p->MA);
 		printf("\n请输入英语成绩:");
 		scanf("%d", &p->EN);
-		p->next = NULL;
-		h = p;
+
 	}
-	if (L != NULL)
+	if (h != NULL)
 		printf("申请成功！");
-	return (L);
+	return (h);
+}
+
+Node * CreateList_End(int n)  //尾插法，头结点为NULL
+{
+	Node *head, *p, *e;
+	int i;
+
+	head = NULL;
+	e = NULL;
+	for(i=0;i<n;i++)
+	{
+		p = (Node*)malloc(sizeof(Node));
+		printf("\n请输入第%d位学生姓名:", i + 1);
+		scanf("%s", p->name);
+		printf("\n请输入学号:");
+		scanf("%d", &p->num);
+		printf("\n请输入语文成绩:");
+		scanf("%d", &p->CH);
+		printf("\n请输入数学成绩:");
+		scanf("%d", &p->MA);
+		printf("\n请输入英语成绩:");
+		scanf("%d", &p->EN);
+		if (head == NULL)        //先判断输入的是不是第一个节点  
+			head = p;
+		else
+			e->next = p;     //e始终指向输入的最后一个节点  
+		e = p;
+	}
+	if (e != NULL)               //如果链表不为空，则最后节点的下一个节点为空  
+		e->next = NULL;
+
+	return head;                //尾插法比头插法复杂一些，程序中要做两次判断，分别是判断第一个节点和最后一个节点的判断。且消耗多一个指针变量e。  
 }
 
 Node * search(Node * head, char *name) //对单个元素进行查找
@@ -74,7 +100,7 @@ Node * search(Node * head, char *name) //对单个元素进行查找
 	return 0;
 }
 
-void insert(Node *head)  //尾插法插入新信息
+void insert(Node *head)  //头插法插入新信息
 {
 	Node *p,*s;
 	char x[20];
@@ -172,7 +198,8 @@ int main()
 
 	printf("需要录入多少位同学的信息：");
 	scanf("%d", &n);
-	head = NewLink(n);  //建立初始化函数
+	//head = NewLink(n);  //建立初始化函数
+	head = CreateList_End(n);
 	system("cls");
 	while (1)
 	{
