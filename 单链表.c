@@ -14,7 +14,7 @@ typedef struct Node
 	struct Node *next;
 }Node;
 
-Node * NewLink(int n) //尾插法建立新表
+Node * NewLink(int n) //头插法建立新表
 {
 	Node *p, *h;
 	int i;
