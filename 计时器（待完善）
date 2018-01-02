@@ -1,0 +1,93 @@
+#include <graphics.h>
+#include <conio.h>
+#include <stdlib.h>
+
+void main()
+{
+	MOUSEMSG m;
+	TCHAR s[9] = _T("开始暂停清零");
+	char s1 = ':';
+	int width, high,key_width,key_length;
+	int i,j,hour,min,sec;
+
+	hour = min = sec = 0;
+	width = 320;
+	high = 200;
+	key_width = width / 4;
+	key_length = 25;
+
+	initgraph(width, high);
+	setbkcolor(RGB(180, 205, 205));
+	cleardevice();
+
+	for (i = 1; i <= 3; i++)
+	{
+		setcolor(RGB(79, 79, 79));
+		setfillcolor(RGB(130, 130, 130));
+		fillrectangle(key_width * i - (key_width - i * 20), 20, key_width * i + i * 20, 45);
+	}
+	for (i = 0,j = 0; i < 6; i++)
+	{ 
+		setbkmode(TRANSPARENT); 
+		settextcolor(BLACK);
+		if (j > 30) 
+			j = 0;
+		if (i < 2)
+			outtextxy(key_width - 40 + (i * 30), key_length, s[i]);
+
+		if (i > 1 && i < 4)
+			outtextxy(key_width * 2 - 20 + j, key_length, s[i]);
+			
+		if (i > 3 && i < 6)
+			outtextxy(key_width * 3 + j, key_length, s[i]);
+
+		j = j + 30;
+	}
+	LOGFONT f;
+	gettextstyle(&f);                     // 获取当前字体设置
+	f.lfHeight = 55;                     
+	f.lfWidth = 38;
+	_tcscpy(f.lfFaceName, _T("黑体"));    
+	f.lfQuality = ANTIALIASED_QUALITY;    // 设置输出效果为抗锯齿  
+	settextstyle(&f); 
+
+	for (i = 0; i < 8; i++)
+	{
+		_stprintf(s, _T("%d%c%d%c%d"), hour, s1, min, s1, sec);
+		outtextxy(25 + i * 50, high / 2, s[i]);
+	}
+	
+		while (true)
+		{       
+			m = GetMouseMsg();
+			if (WM_LBUTTONDOWN)
+			{
+				if ((m.x >= key_width - 60 && m.x <= key_width + 20) && (m.y >= 20 && m.y <= 45))
+				{
+					while (true)
+					{
+						for (i = 0; i < 8; i++)
+						{
+							settextcolor(BLACK);
+							_stprintf(s, _T("%d%c%d%c%d"), hour, s1, min, s1, sec);
+							outtextxy(25 + i * 50, high / 2, s[i]);
+						}
+						sec++;
+						Sleep(20);
+
+						setfillcolor(RGB(180, 205, 205));
+						solidrectangle(0, high / 2, width, high);
+
+						if (sec == 100)
+						{
+							sec = 0;
+							min++;
+						}
+					}
+				}
+			}
+		}
+	
+	_getch();
+	closegraph();
+}
