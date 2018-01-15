@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int a[] = { 6,1,2,7,9,3,4,5,10,8 };
+int n = 9;
+
+void quicksort(int left, int right)
+{
+	int i, j, t, temp;
+
+	if (left > right)   //需要排序的数不能小于1
+		return;
+
+	temp = a[left];     //temp中存有基准数
+	i = left;
+	j = right;
+	while (i != j)
+	{
+		//顺序很重要，要先从左往右找
+		while (a[j] >= temp && i < j)
+			j--;
+		//再从右往左找
+		while (a[i] <= temp && i < j)
+			i++;
+		//交换两个数在数组中的位置
+		if (i < j) //当i和j没有相遇时将i和j进行交换
+		{
+			t = a[i];
+			a[i] = a[j];
+			a[j] = t;
+		}
+	}
+	//最终将基准数归位
+	a[left] = a[i];
+	a[i] = temp;
+
+	quicksort(left, i - 1);     //继续处理左边的，这是一个递归的过程
+	quicksort(i + 1, right);    //继续处理右边的，同上
+}
+
+int main()
+{
+	int i;
+	
+	quicksort(0, n);      
+
+	for (i = 0; i <= n; i++)
+		printf("%d\n", a[i]);
+	printf("\n");
+
+	return 0;
+	
+}
