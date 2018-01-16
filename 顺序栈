@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef int SElemType;
+typedef struct
+{
+	int *base;
+	int *top;
+	int stacksize;
+}SqStack;
+
+int initStack(SqStack *S)               //初始化
+{
+	S->base = (int*)malloc(100 * sizeof(int));
+	if (!S)
+		return 0; //0代表操作失败
+	S->top = S->base;
+	S->stacksize = 100;
+	return 1; //1代表操作完成
+}
+
+int push(SqStack * S, int elem)          //进栈
+{
+	if (S->top - S->base >= S->stacksize)
+	{
+		S->base = (SElemType *)
+			realloc(S->base, (S->stacksize + 10) * sizeof(SElemType)); //10代表增量，可以使用宏定义，方便后续修改。
+		if (!S->base)
+			return 0;
+		S->top = S->base + S->stacksize;
+		S->stacksize += 10;
+	}
+	*S->top++ = elem;
+	return 1;
+}
+
+int pop(SqStack *S)              //出栈
+{
+	if (S->top == S->base)
+		return 0;
+	return *S->top--;;
+}
+
+void printfStack(SqStack *S)          //打印
+{
+	int *p = S->base;
+	puts("输出栈");
+	for (p; p != S->top; p++)
+	{
+		printf("***%d", *p);
+	}
+}
+
+void main()
+{
+	SqStack *S;
+	S = (SqStack *)malloc( 100 * sizeof(SqStack));
+	int elem;
+
+	initStack(S);
+	for (int i = 0; i < 5; i++)
+	{
+		scanf("%d", &elem);
+		push(S, elem);
+
+	}
+	
+	pop(S);
+	printfStack(S);
+
+}
